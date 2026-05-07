@@ -1,0 +1,34 @@
+# Python
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+
+# Environments
+.venv/
+venv/
+env/
+*.egg-info/
+
+# Large data and generated outputs
+input/raw/*
+input/processed/*
+output/checkpoints/*
+output/figures/*
+output/logs/*
+output/tables/*
+output/samples/*
+
+# Keep folder structure
+!**/.gitkeep
+
+# OS/editor
+.DS_Store
+.vscode/
+.idea/
+
+# Reports build files
+*.aux
+*.log
+*.out
+*.toc
+*.synctex.gz
