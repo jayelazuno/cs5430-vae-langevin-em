@@ -652,7 +652,7 @@ python scripts/plot_vae_em_metrics.py
 | Main driver             | `main.py`                      |
 | Full pipeline script    | `scripts/run_main_results.sh`  |
 
-11. Conclusion
+## 11. Conclusion
 
 This project implemented and compared two approaches to training a latent-variable generative model on MNIST. The baseline VAE optimized the ELBO using an amortized diagonal-Gaussian approximate posterior. The approximate EM method initialized from the VAE, used Langevin dynamics to sample from the true posterior pθ(z∣x), and updated the decoder using minibatch approximate M-steps.
 
