@@ -1,0 +1,46 @@
+project:
+  name: cs5430-vae-langevin-em
+  dataset: MNIST
+  seed: 123
+
+data:
+  root: input/raw
+  batch_size: 128
+  num_workers: 0
+  val_fraction: 0.1
+
+model:
+  input_dim: 784
+  latent_dim: 10
+  hidden_dim: 400
+  likelihood: bernoulli
+
+vae_training:
+  epochs: 20
+  lr: 0.001
+
+langevin:
+  step_size: 0.001
+  n_steps: 30
+  burn_in: 10
+  n_samples: 1
+
+em_training:
+  epochs: 1
+  m_steps_per_batch: 1
+  lr: 0.0005
+  max_train_batches: 50
+  max_val_batches: 20
+
+evaluation:
+  n_likelihood_samples: 1000
+  tsne_n_samples: 2000
+  n_reconstructions: 16
+  n_generated_samples: 64
+
+output:
+  checkpoint_dir: output/checkpoints
+  figure_dir: output/figures
+  table_dir: output/tables
+  log_dir: output/logs
+  sample_dir: output/samples
