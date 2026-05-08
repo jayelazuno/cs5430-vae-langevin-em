@@ -7,8 +7,10 @@ data:
   root: input/raw
   batch_size: 128
   num_workers: 2
+  val_fraction: 0.1
 
 model:
+  input_dim: 784
   latent_dim: 10
   hidden_dim: 400
   likelihood: bernoulli
@@ -31,6 +33,8 @@ em_training:
 evaluation:
   n_likelihood_samples: 1000
   tsne_n_samples: 2000
+  n_reconstructions: 16
+  n_generated_samples: 64
 
 output:
   checkpoint_dir: output/checkpoints
