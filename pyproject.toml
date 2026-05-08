@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cs5430-vae-langevin-em"
+version = "0.1.0"
+description = "CS5430 final project: VAE, Langevin posterior sampling, and approximate EM"
+requires-python = ">=3.10"
+dependencies = [
+    "numpy<2",
+    "torch",
+    "torchvision",
+    "pandas",
+    "matplotlib",
+    "scikit-learn",
+    "tqdm",
+    "PyYAML"
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["src*"]
