@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>final_report</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      white-space: pre-wrap;
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #1a1a1a;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+  </style>
+  <script defer=""
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"
+  type="text/javascript"></script>
+</head>
+<body>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a
+href="#variational-autoencoders-langevin-posterior-sampling-and-approximate-em"
+id="toc-variational-autoencoders-langevin-posterior-sampling-and-approximate-em">Variational
+Autoencoders, Langevin Posterior Sampling, and Approximate EM</a>
+<ul>
+<li><a href="#introduction" id="toc-introduction">1.
+Introduction</a></li>
+<li><a href="#vae-objective" id="toc-vae-objective">2. VAE
+Objective</a></li>
+<li><a href="#posterior-gap-and-motivation-for-approximate-em"
+id="toc-posterior-gap-and-motivation-for-approximate-em">3. Posterior
+Gap and Motivation for Approximate EM</a></li>
+<li><a href="#langevin-sampler-derivation"
+id="toc-langevin-sampler-derivation">4. Langevin Sampler
+Derivation</a></li>
+<li><a href="#approximate-em" id="toc-approximate-em">5. Approximate
+EM</a></li>
+<li><a href="#evaluation-metrics" id="toc-evaluation-metrics">6.
+Evaluation Metrics</a>
+<ul>
+<li><a href="#encoder-mean-reconstruction-loss"
+id="toc-encoder-mean-reconstruction-loss">6.1 Encoder-Mean
+Reconstruction Loss</a></li>
+<li><a href="#approximate-test-log-likelihood"
+id="toc-approximate-test-log-likelihood">6.2 Approximate Test
+Log-Likelihood</a></li>
+<li><a href="#latent-representation-visualization"
+id="toc-latent-representation-visualization">6.3 Latent Representation
+Visualization</a></li>
+</ul></li>
+<li><a href="#results" id="toc-results">7. Results</a>
+<ul>
+<li><a href="#reconstructions-and-prior-samples"
+id="toc-reconstructions-and-prior-samples">7.1 Reconstructions and Prior
+Samples</a></li>
+<li><a href="#quantitative-comparison"
+id="toc-quantitative-comparison">7.2 Quantitative Comparison</a></li>
+<li><a href="#latent-t-sne-visualizations"
+id="toc-latent-t-sne-visualizations">7.3 Latent t-SNE
+Visualizations</a></li>
+</ul></li>
+<li><a href="#discussion" id="toc-discussion">8. Discussion</a></li>
+<li><a href="#limitations-and-future-work"
+id="toc-limitations-and-future-work">9. Limitations and Future
+Work</a></li>
+<li><a href="#reproducibility" id="toc-reproducibility">10.
+Reproducibility</a></li>
+<li><a href="#conclusion" id="toc-conclusion">11. Conclusion</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1
+id="variational-autoencoders-langevin-posterior-sampling-and-approximate-em">Variational
+Autoencoders, Langevin Posterior Sampling, and Approximate EM</h1>
+<p><strong>Course:</strong> CS5430 Machine Learning<br />
+<strong>Project:</strong> Final Project: Diffusion/Sampling-Inspired
+Inference for VAEs<br />
+<strong>Author:</strong> Joshua Ayelazuno<br />
+<strong>Dataset:</strong> MNIST<br />
+<strong>Latent dimension:</strong> 10</p>
+<h2 id="introduction">1. Introduction</h2>
+<p>Latent-variable generative models introduce an unobserved variable
+<span class="math inline">\(z\)</span> to explain the observed data
+<span class="math inline">\(x\)</span>. In a variational autoencoder
+(VAE), the generative model is defined by a prior distribution over
+latent variables and a conditional likelihood for the data:</p>
+<p><span class="math display">\[
+p(z) = \mathcal{N}(z; 0, I),
+\qquad
+p_\theta(x \mid z).
+\]</span></p>
+<p>The decoder <span class="math inline">\(p_\theta(x \mid z)\)</span>
+maps a low-dimensional latent vector <span
+class="math inline">\(z\)</span> to a distribution over images. For this
+project, I used MNIST images and a latent dimension of 10. Since MNIST
+images are approximately binary after normalization to <span
+class="math inline">\([0,1]\)</span>, I modeled the decoder likelihood
+as a Bernoulli distribution over pixels:</p>
+<p><span class="math display">\[
+p_\theta(x \mid z)
+=
+\prod_{j=1}^{784}
+\operatorname{Bernoulli}(x_j;\sigma(a_j(z))),
+\]</span></p>
+<p>where <span class="math inline">\(a_j(z)\)</span> is the decoder
+logit for pixel <span class="math inline">\(j\)</span>, and <span
+class="math inline">\(\sigma(\cdot)\)</span> is the sigmoid
+function.</p>
+<p>The central difficulty is that maximum likelihood training requires
+the marginal likelihood</p>
+<p><span class="math display">\[
+p_\theta(x)
+=
+\int p(z)p_\theta(x \mid z)\, dz,
+\]</span></p>
+<p>which is generally intractable for nonlinear neural-network decoders.
+Standard VAE training avoids this by introducing an approximate
+posterior <span class="math inline">\(q_\phi(z \mid x)\)</span>,
+deriving an evidence lower bound (ELBO), and optimizing this lower bound
+instead of the exact log-likelihood.</p>
+<p>The goal of this project was to compare this standard VAE approach
+with an approximate expectation-maximization (EM) approach. Instead of
+relying only on the amortized approximate posterior <span
+class="math inline">\(q_\phi(z \mid x)\)</span>, the approximate EM
+method uses Langevin dynamics to sample from the true posterior <span
+class="math inline">\(p_\theta(z \mid x)\)</span> up to an intractable
+normalizing constant. These posterior samples are then used to update
+the generator <span class="math inline">\(p_\theta(x \mid
+z)\)</span>.</p>
+<h2 id="vae-objective">2. VAE Objective</h2>
+<p>The <strong>marginal likelihood</strong> can be rewritten by
+introducing an arbitrary density <span class="math inline">\(q_\phi(z
+\mid x)\)</span>:</p>
+<p><span class="math display">\[
+\log p_\theta(x)
+=
+\log
+\int
+p_\theta(x,z)\, dz
+=
+\log
+\int
+\frac{p_\theta(x,z)}{q_\phi(z \mid x)}
+q_\phi(z \mid x)\, dz.
+\]</span></p>
+<p>Applying <strong>Jensen’s inequality</strong> gives the evidence
+lower bound:</p>
+<p><span class="math display">\[
+\log p_\theta(x)
+\ge
+\mathbb{E}_{q_\phi(z \mid x)}
+\left[
+\log
+\frac{p_\theta(x,z)}{q_\phi(z \mid x)}
+\right].
+\]</span></p>
+<p>Since</p>
+<p><span class="math display">\[
+p_\theta(x,z) = p(z)p_\theta(x \mid z),
+\]</span></p>
+<p>the <strong>ELBO</strong> becomes</p>
+<p><span class="math display">\[
+\mathcal{L}(\theta,\phi;x)
+=
+\mathbb{E}_{q_\phi(z \mid x)}\!\left[
+\log p_\theta(x \mid z)
+\right]
+-
+\mathrm{D}_{\mathrm{KL}}
+\left(
+q_\phi(z \mid x)
+\,\|\,
+p(z)
+\right).
+\]</span></p>
+<p>Therefore, the negative ELBO minimized during training is</p>
+<p><span class="math display">\[
+-\mathcal{L}(\theta,\phi;x)
+=
+-\mathbb{E}_{q_\phi(z \mid x)}\!\left[
+\log p_\theta(x \mid z)
+\right]
++
+\mathrm{D}_{\mathrm{KL}}
+\left(
+q_\phi(z \mid x)
+\,\|\,
+p(z)
+\right).
+\]</span></p>
+<p>The first term is the reconstruction loss. The second term
+regularizes the approximate posterior toward the standard normal
+prior.</p>
+<p>The encoder was parameterized as a diagonal Gaussian:</p>
+<p><span class="math display">\[
+q_\phi(z \mid x)
+=
+\mathcal{N}
+\left(
+z;
+\mu_\phi(x),
+\operatorname{diag}(\sigma_\phi^2(x))
+\right).
+\]</span></p>
+<p>To backpropagate through samples from <span
+class="math inline">\(q_\phi(z \mid x)\)</span>, I used the
+reparameterization trick:</p>
+<p><span class="math display">\[
+z
+=
+\mu_\phi(x)
++
+\sigma_\phi(x)\odot \epsilon,
+\qquad
+\epsilon \sim \mathcal{N}(0, I).
+\]</span></p>
+<p>For the MNIST Bernoulli likelihood, the negative log-likelihood term
+is binary cross entropy with logits:</p>
+<p><span class="math display">\[
+-\log p_\theta(x \mid z)
+=
+\sum_{j=1}^{784}
+\operatorname{BCEWithLogits}
+(a_j(z),x_j).
+\]</span></p>
+<p>The VAE was trained for 20 epochs. The final validation metrics
+were:</p>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th style="text-align: right;">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Validation negative ELBO</td>
+<td style="text-align: right;">109.197</td>
+</tr>
+<tr>
+<td>Validation reconstruction loss</td>
+<td style="text-align: right;">90.691</td>
+</tr>
+<tr>
+<td>Validation KL divergence</td>
+<td style="text-align: right;">18.506</td>
+</tr>
+</tbody>
+</table>
+<p>The validation negative ELBO decreased smoothly from 131.008 to
+109.197, indicating stable training.</p>
+<p><img src="figures/vae_negative_elbo_curve.png"
+alt="VAE negative ELBO curve" /> <strong>Figure 1: VAE negative ELBO
+curve</strong></p>
+<p><img src="figures/vae_reconstruction_loss_curve.png"
+alt="VAE reconstruction loss curve" /> <strong>Figure 2: VAE
+reconstruction loss curve</strong></p>
+<p><img src="figures/vae_kl_divergence_curve.png"
+alt="VAE KL divergence curve" /> <strong>Figure 3: VAE KL divergence
+curve</strong></p>
+<h2 id="posterior-gap-and-motivation-for-approximate-em">3. Posterior
+Gap and Motivation for Approximate EM</h2>
+<p>The VAE does not directly maximize the exact likelihood. The
+difference between the true log-likelihood and the ELBO is</p>
+<p><span class="math display">\[
+\log p_\theta(x)
+-
+\mathcal{L}(\theta,\phi;x)
+=
+\mathrm{D}_{\mathrm{KL}}
+\left(
+q_\phi(z \mid x)
+\,\|\,
+p_\theta(z \mid x)
+\right)
+\ge 0.
+\]</span></p>
+<p>Thus, the ELBO is tight only when</p>
+<p><span class="math display">\[
+q_\phi(z \mid x) = p_\theta(z \mid x).
+\]</span></p>
+<p>In practice, <span class="math inline">\(q_\phi(z \mid x)\)</span> is
+restricted to a simple family, such as diagonal Gaussians. The true
+posterior can be more complex, especially with nonlinear decoders. This
+motivates approximate EM: instead of using only <span
+class="math inline">\(q_\phi(z \mid x)\)</span>, we try to sample from
+the true posterior <span class="math inline">\(p_\theta(z \mid
+x)\)</span> and use those samples to update the generative model.</p>
+<p>The true posterior is</p>
+<p><span class="math display">\[
+p_\theta(z \mid x)
+=
+\frac{p(z)p_\theta(x \mid z)}{p_\theta(x)},
+\]</span></p>
+<p>where</p>
+<p><span class="math display">\[
+p_\theta(x)
+=
+\int p(z)p_\theta(x \mid z)\, dz.
+\]</span></p>
+<p>The denominator is intractable, but it does not depend on <span
+class="math inline">\(z\)</span>. Langevin sampling only requires the
+gradient of the log-density with respect to <span
+class="math inline">\(z\)</span>, so the intractable denominator
+disappears.</p>
+<h2 id="langevin-sampler-derivation">4. Langevin Sampler Derivation</h2>
+<p>The <strong>target posterior</strong> is</p>
+<p><span class="math display">\[
+p_\theta(z \mid x)
+\propto
+p(z)p_\theta(x \mid z).
+\]</span></p>
+<p>Taking the log gives the unnormalized posterior log-density:</p>
+<p><span class="math display">\[
+\log p_\theta(z \mid x)
+=
+\log p(z)
++
+\log p_\theta(x \mid z)
+-
+\log p_\theta(x).
+\]</span></p>
+<p>Since <span class="math inline">\(\log p_\theta(x)\)</span> is
+constant with respect to <span class="math inline">\(z\)</span>,</p>
+<p><span class="math display">\[
+\nabla_z \log p_\theta(z \mid x)
+=
+\nabla_z \log p(z)
++
+\nabla_z \log p_\theta(x \mid z).
+\]</span></p>
+<p>For the <strong>standard normal prior</strong>,</p>
+<p><span class="math display">\[
+\log p(z)
+=
+-\frac{1}{2}z^\top z + C,
+\]</span></p>
+<p>so</p>
+<p><span class="math display">\[
+\nabla_z \log p(z) = -z.
+\]</span></p>
+<p>For the <strong>Bernoulli decoder</strong>,</p>
+<p><span class="math display">\[
+\log p_\theta(x \mid z)
+=
+\sum_{j=1}^{784}
+\left[
+x_j \log \sigma(a_j(z))
++
+(1-x_j)\log(1-\sigma(a_j(z)))
+\right].
+\]</span></p>
+<p>The <strong>gradient</strong></p>
+<p><span class="math display">\[
+\nabla_z \log p_\theta(x \mid z)
+\]</span></p>
+<p>depends on the neural-network decoder, so I computed it using PyTorch
+automatic differentiation.</p>
+<p>Using the unadjusted Langevin algorithm, the update is</p>
+<p><span class="math display">\[
+z^{(\tau+1)}
+=
+z^{(\tau)}
++
+\eta
+\nabla_z \log p_\theta(z^{(\tau)} \mid x)
++
+\sqrt{2\eta}\epsilon^{(\tau)},
+\]</span></p>
+<p>where</p>
+<p><span class="math display">\[
+\epsilon^{(\tau)} \sim \mathcal{N}(0, I).
+\]</span></p>
+<p>The first term moves the sample toward higher posterior density. The
+second term injects Gaussian noise, allowing the chain to sample from
+the distribution rather than simply perform gradient ascent to a
+posterior mode.</p>
+<p>In the implementation, I initialized the Langevin chain at the VAE
+encoder mean:</p>
+<p><span class="math display">\[
+z^{(0)} = \mu_\phi(x).
+\]</span></p>
+<p>This makes the sampler more efficient because the encoder mean is
+already near a region of high posterior density. The model parameters
+were temporarily frozen during the Langevin E-step because gradients
+were required with respect to <span class="math inline">\(z\)</span>,
+not with respect to <span class="math inline">\(\theta\)</span>.</p>
+<p>A smoke test showed that reconstructions from Langevin posterior
+samples remained consistent with the original images and with
+reconstructions from the encoder mean.</p>
+<p><img src="figures/langevin_posterior_smoke_test.png"
+alt="Langevin posterior smoke test" /><br> <strong>Figure 4: Langevin
+posterior smoke test</strong></p>
+<h2 id="approximate-em">5. Approximate EM</h2>
+<p>The EM algorithm alternates between an <strong>E-step</strong> and an
+<strong>M-step</strong>. In an ideal latent-variable model, the E-step
+computes the posterior under the current parameters:</p>
+<p><span class="math display">\[
+p_{\theta^{\mathrm{old}}}(z \mid x).
+\]</span></p>
+<p>The M-step maximizes the expected complete-data log-likelihood:</p>
+<p><span class="math display">\[
+Q(\theta,\theta^{\mathrm{old}})
+=
+\mathbb{E}_{p_{\theta^{\mathrm{old}}}(z \mid x)}\!\left[
+\log p_\theta(x,z)
+\right].
+\]</span></p>
+<p>Since</p>
+<p><span class="math display">\[
+\log p_\theta(x,z)
+=
+\log p(z)
++
+\log p_\theta(x \mid z),
+\]</span></p>
+<p>and <span class="math inline">\(\log p(z)\)</span> does not depend on
+the decoder parameters, the M-step for the generator focuses on</p>
+<p><span class="math display">\[
+\mathbb{E}_{p_{\theta^{\mathrm{old}}}(z \mid x)}\!\left[
+\log p_\theta(x \mid z)
+\right].
+\]</span></p>
+<p>Because the exact posterior expectation is not available, I
+approximated it with Langevin samples:</p>
+<p><span class="math display">\[
+z^{(1)},\ldots,z^{(S)}
+\sim
+p_{\theta^{\mathrm{old}}}(z \mid x).
+\]</span></p>
+<p>Then</p>
+<p><span class="math display">\[
+Q(\theta,\theta^{\mathrm{old}})
+\approx
+\frac{1}{S}
+\sum_{s=1}^{S}
+\log p_\theta(x \mid z^{(s)}).
+\]</span></p>
+<p>The approximate M-step minimizes the negative version:</p>
+<p><span class="math display">\[
+-\frac{1}{S}
+\sum_{s=1}^{S}
+\log p_\theta(x \mid z^{(s)}).
+\]</span></p>
+<p>For the Bernoulli MNIST model, this is again binary cross entropy
+between the original image and the decoder logits.</p>
+<p>The minibatch approximate EM algorithm used in this project was:</p>
+<ol type="1">
+<li>Load a minibatch of images <span
+class="math inline">\(x\)</span>.</li>
+<li>Use the frozen VAE encoder to initialize <span
+class="math inline">\(z^{(0)}=\mu_\phi(x)\)</span>.</li>
+<li>Run Langevin dynamics using the current decoder to sample from <span
+class="math inline">\(p_{\theta^{\mathrm{old}}}(z \mid x)\)</span>.</li>
+<li>Detach the sampled latent variables from the computation graph.</li>
+<li>Perform one or more gradient steps on the decoder using the sampled
+<span class="math inline">\(z\)</span>’s.</li>
+<li>Repeat for each minibatch.</li>
+</ol>
+<p>The encoder was frozen during approximate EM. It was retained only as
+a practical initialization for Langevin chains. The generator/decoder
+was the part of the model updated in the approximate M-step.</p>
+<p>The EM configuration used for the final comparison was:</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th style="text-align: right;">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>EM epochs</td>
+<td style="text-align: right;">5</td>
+</tr>
+<tr>
+<td>Maximum training minibatches per epoch</td>
+<td style="text-align: right;">200</td>
+</tr>
+<tr>
+<td>Batch size</td>
+<td style="text-align: right;">128</td>
+</tr>
+<tr>
+<td>Langevin steps</td>
+<td style="text-align: right;">50</td>
+</tr>
+<tr>
+<td>Burn-in steps</td>
+<td style="text-align: right;">20</td>
+</tr>
+<tr>
+<td>Posterior samples per image</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr>
+<td>M-step updates per minibatch</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr>
+<td>EM learning rate</td>
+<td style="text-align: right;">0.0005</td>
+</tr>
+</tbody>
+</table>
+<p>The approximate EM training metrics were stable:</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: right;">Epoch</th>
+<th style="text-align: right;">Train M-step NLL</th>
+<th style="text-align: right;">Validation encoder-mean reconstruction
+loss</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">85.971</td>
+<td style="text-align: right;">85.083</td>
+</tr>
+<tr>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">85.458</td>
+<td style="text-align: right;">85.018</td>
+</tr>
+<tr>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">85.293</td>
+<td style="text-align: right;">84.926</td>
+</tr>
+<tr>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">85.062</td>
+<td style="text-align: right;">84.918</td>
+</tr>
+<tr>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">85.230</td>
+<td style="text-align: right;">84.845</td>
+</tr>
+</tbody>
+</table>
+<p>The validation diagnostic improved from 85.083 to 84.845. The M-step
+NLL also remained stable, with a small increase at the final epoch. This
+is not surprising because the training is stochastic: each minibatch
+uses approximate Langevin samples rather than an exact E-step.</p>
+<p><img src="figures/em_m_step_nll_curve.png"
+alt="EM M-step NLL curve" /><br> <strong>Figure 5: EM M-step NLL
+curve</strong></p>
+<p><img src="figures/em_validation_reconstruction_curve.png"
+alt="EM validation reconstruction curve" /><br> <strong>Figure 6: EM
+validation reconstruction curve</strong></p>
+<h2 id="evaluation-metrics">6. Evaluation Metrics</h2>
+<p>I compared the baseline <strong>VAE</strong> and the approximate
+<strong>EM-trained</strong> model using three main criteria.</p>
+<h3 id="encoder-mean-reconstruction-loss">6.1 Encoder-Mean
+Reconstruction Loss</h3>
+<p>For both models, I computed deterministic reconstructions using</p>
+<p><span class="math display">\[
+z = \mu_\phi(x).
+\]</span></p>
+<p>Then I measured the Bernoulli negative log-likelihood of the image
+under the decoder:</p>
+<p><span class="math display">\[
+-\log p_\theta(x \mid \mu_\phi(x)).
+\]</span></p>
+<p>This gives a fair deterministic reconstruction diagnostic, although
+it is not the full VAE objective.</p>
+<h3 id="approximate-test-log-likelihood">6.2 Approximate Test
+Log-Likelihood</h3>
+<p>The marginal likelihood is</p>
+<p><span class="math display">\[
+p_\theta(x)
+=
+\int p(z)p_\theta(x \mid z)\, dz.
+\]</span></p>
+<p>I approximated this integral by importance sampling using the encoder
+as the proposal distribution:</p>
+<p><span class="math display">\[
+q_\phi(z \mid x).
+\]</span></p>
+<p>Using samples</p>
+<p><span class="math display">\[
+z^{(s)} \sim q_\phi(z \mid x),
+\]</span></p>
+<p>the estimate is</p>
+<p><span class="math display">\[
+p_\theta(x)
+\approx
+\frac{1}{S}
+\sum_{s=1}^{S}
+\frac{
+p(z^{(s)})p_\theta(x \mid z^{(s)})
+}{
+q_\phi(z^{(s)} \mid x)
+}.
+\]</span></p>
+<p>In log-space,</p>
+<p><span class="math display">\[
+\log p_\theta(x)
+\approx
+\log
+\left[
+\frac{1}{S}
+\sum_{s=1}^{S}
+\exp
+\left(
+\log p_\theta(x \mid z^{(s)})
++
+\log p(z^{(s)})
+-
+\log q_\phi(z^{(s)} \mid x)
+\right)
+\right].
+\]</span></p>
+<p>For the final comparison, I used <strong>500 importance</strong>
+samples per image and evaluated all <strong>10,000 MNIST</strong> test
+images.</p>
+<h3 id="latent-representation-visualization">6.3 Latent Representation
+Visualization</h3>
+<p>I also visualized latent representations using t-SNE. For the VAE, I
+used encoder means <span class="math inline">\(\mu_\phi(x)\)</span>. For
+the EM-trained model, I visualized both the encoder-mean initialization
+and one Langevin posterior sample per image.</p>
+<h2 id="results">7. Results</h2>
+<h3 id="reconstructions-and-prior-samples">7.1 Reconstructions and Prior
+Samples</h3>
+<p>The VAE reconstructions are digit-like and remain close to the
+original MNIST images.</p>
+<p><img src="figures/vae_reconstructions.png"
+alt="VAE reconstructions" /><br> <strong>Figure 7: VAE
+reconstruction</strong></p>
+<p>The approximate EM reconstructions are also digit-like and visually
+similar to the original images.</p>
+<p><img src="figures/em_reconstructions.png"
+alt="EM reconstructions" /><br> <strong>Figure 8: EM
+reconstruction</strong></p>
+<p>Samples from the prior were generated by drawing</p>
+<p><span class="math display">\[
+z \sim \mathcal{N}(0, I)
+\]</span></p>
+<p>and decoding through <span class="math inline">\(p_\theta(x \mid
+z)\)</span>.</p>
+</div>
+<figure>
+<img src="figures/vae_prior_samples.png" alt="VAE prior samples" />
+<figcaption aria-hidden="true">VAE prior samples</figcaption>
+</figure>
+</div>
+<p><strong>Figure 9: VAE prior samples</strong></p>
+</div>
+<figure>
+<img src="figures/em_prior_samples.png" alt="EM prior samples" />
+<figcaption aria-hidden="true">EM prior samples</figcaption>
+</figure>
+</div>
+<p><strong>Figure 10: EM prior samples</strong></p>
+<p>The EM prior samples remained digit-like, although the visual
+difference from the VAE samples was not dramatic. This is expected
+because EM was initialized from a trained VAE and then run for a
+moderate number of updates.</p>
+<h3 id="quantitative-comparison">7.2 Quantitative Comparison</h3>
+<p>The final test comparison used all 10,000 MNIST test examples and 500
+importance samples per image.</p>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 26%" />
+<col style="width: 26%" />
+<col style="width: 26%" />
+</colgroup>
+<thead>
+<tr>
+<th>Model</th>
+<th style="text-align: right;">Encoder-mean reconstruction loss</th>
+<th style="text-align: right;">Approx. mean test log-likelihood</th>
+<th style="text-align: right;">Std. across test images</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>VAE</td>
+<td style="text-align: right;">84.612</td>
+<td style="text-align: right;">-104.602</td>
+<td style="text-align: right;">29.797</td>
+</tr>
+<tr>
+<td>Approximate EM</td>
+<td style="text-align: right;">83.625</td>
+<td style="text-align: right;">-103.890</td>
+<td style="text-align: right;">29.694</td>
+</tr>
+</tbody>
+</table>
+<p>The approximate EM model improved the encoder-mean reconstruction
+loss by</p>
+<p><span class="math display">\[
+84.612 - 83.625 = 0.987
+\]</span></p>
+<p>nats per image.</p>
+<p>It also improved the approximate mean test log-likelihood by</p>
+<p><span class="math display">\[
+-103.890 - (-104.602) = 0.713
+\]</span></p>
+<p>nats per image.</p>
+<p>Because larger log-likelihood is better, the less negative value for
+the approximate EM model indicates a modest improvement.</p>
+<p><img src="figures/vae_em_reconstruction_comparison.png"
+alt="VAE vs EM reconstruction comparison" /><br> <strong>Figure 11: VAE
+vs EM reconstruction comparison</strong></p>
+<p><img src="figures/vae_em_likelihood_comparison.png"
+alt="VAE vs EM likelihood comparison" /><br> <strong>Figure 12: VAE vs
+EM likelihood comparisons</strong></p>
+<h3 id="latent-t-sne-visualizations">7.3 Latent t-SNE
+Visualizations</h3>
+<p>The VAE encoder means show class-dependent structure in the latent
+space.</p>
+<p><img src="figures/vae_encoder_mean_tsne.png"
+alt="VAE encoder mean t-SNE" /><br> <strong>Figure 13: VAE encoder mean
+t-SNE</strong></p>
+<p>The EM model using encoder means gives a comparable latent
+organization because the encoder was initialized from the VAE and frozen
+during EM.</p>
+<p><img src="figures/em_encoder_mean_tsne.png"
+alt="EM encoder mean t-SNE" /><br> <strong>Figure 14: EM encoder mean
+t-SNE</strong></p>
+<p>The EM Langevin posterior samples also retain digit-dependent
+structure, but they reflect posterior samples after local refinement
+under the decoder.</p>
+<p><img src="figures/em_langevin_posterior_tsne.png"
+alt="EM Langevin posterior t-SNE" /><br> <strong>Figure 15: EM Langevin
+posterior t-SNE</strong></p>
+<h2 id="discussion">8. Discussion</h2>
+<p>The results show that <strong>approximate EM</strong> slightly
+improved the <strong>VAE-initialized</strong> generator. The
+reconstruction loss decreased from <strong>84.612</strong> to
+<strong>83.625</strong> nats per image, and the approximate mean test
+log-likelihood improved from <strong>-104.602</strong> to
+<strong>-103.890</strong> nats per image.</p>
+<p>This supports the main idea of the project. The VAE relies on an
+amortized approximate posterior <span class="math inline">\(q_\phi(z
+\mid x)\)</span>. If this approximate posterior differs from the true
+posterior <span class="math inline">\(p_\theta(z \mid x)\)</span>, then
+the ELBO is not equal to the true log-likelihood. Approximate EM
+attempts to reduce this limitation by using Langevin dynamics to sample
+from the true posterior, up to the unknown normalizing constant.</p>
+<p>The improvement was modest, not dramatic. There are several reasons
+for this. First, the approximate EM model was initialized from a
+well-trained VAE, so the baseline was already strong. Second, the EM run
+was intentionally moderate because Langevin sampling is computationally
+expensive. Third, only one posterior sample per image was used in the
+M-step. More posterior samples, more Langevin steps, or more M-step
+updates might improve the result, but would increase runtime.</p>
+<p>An important distinction is that VAE training jointly learns both the
+encoder and decoder, while my approximate EM procedure froze the encoder
+and updated only the decoder. The encoder was used only to initialize
+the Langevin chain. Therefore, the EM model can improve the generator
+without improving the amortized encoder itself.</p>
+<p>Another important point is that better posterior-sample
+reconstruction does not automatically guarantee better prior samples.
+The VAE objective explicitly regularizes <span
+class="math inline">\(q_\phi(z \mid x)\)</span> toward the prior <span
+class="math inline">\(p(z)\)</span>, which helps make random prior
+samples decode into meaningful images. Approximate EM updates the
+decoder using posterior samples and does not directly train an encoder
+to match the prior. In this experiment, prior samples remained
+reasonable, likely because EM started from a trained VAE and used only
+moderate updates.</p>
+<h2 id="limitations-and-future-work">9. Limitations and Future Work</h2>
+<p>This project used MNIST and a simple multilayer perceptron VAE. MNIST
+is useful for debugging and for clear interpretation, but it is much
+simpler than natural image datasets such as CIFAR. A convolutional VAE
+would likely perform better on image data.</p>
+<p>The approximate EM run used one posterior sample per image and one
+M-step update per minibatch. A larger experiment could explore:</p>
+<ol type="1">
+<li>more posterior samples per image,</li>
+<li>more Langevin steps,</li>
+<li>different Langevin step sizes,</li>
+<li>multiple M-step updates per minibatch,</li>
+<li>persistent chains rather than reinitializing from the encoder
+mean,</li>
+<li>convolutional encoder and decoder architectures,</li>
+<li>CIFAR experiments.</li>
+</ol>
+<p>Finally, the approximate likelihood estimates are importance-sampling
+estimates using the encoder as the proposal distribution. These are
+useful for model comparison, but they are still approximations to the
+true marginal likelihood.</p>
+<h2 id="reproducibility">10. Reproducibility</h2>
+<p>The main pipeline can be reproduced with:</p>
+<p>./scripts/run_main_results.sh</p>
+<p>python main.py –config configs/mnist_latent10.yaml –mode train_vae
+python scripts/plot_vae_training_history.py</p>
+<p>python main.py –config configs/mnist_em_medium.yaml –mode train_em
+python scripts/plot_em_training_history.py</p>
+<p>python scripts/compare_vae_em.py<br />
+–config configs/mnist_em_medium.yaml<br />
+–likelihood_samples 500<br />
+–max_test_batches 80<br />
+–tsne_points 2000</p>
+<p>The implementation files are organized as follows:</p>
+<p>python scripts/plot_vae_em_metrics.py</p>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>File</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>VAE model</td>
+<td><code>src/models/vae.py</code></td>
+</tr>
+<tr>
+<td>VAE loss</td>
+<td><code>src/training/vae_loss.py</code></td>
+</tr>
+<tr>
+<td>VAE training loop</td>
+<td><code>src/training/train_vae.py</code></td>
+</tr>
+<tr>
+<td>Langevin sampler</td>
+<td><code>src/sampling/langevin.py</code></td>
+</tr>
+<tr>
+<td>Approximate EM training</td>
+<td><code>src/training/train_em.py</code></td>
+</tr>
+<tr>
+<td>Evaluation metrics</td>
+<td><code>src/evaluation/metrics.py</code></td>
+</tr>
+<tr>
+<td>Latent visualization</td>
+<td><code>src/evaluation/latent_viz.py</code></td>
+</tr>
+<tr>
+<td>Main driver</td>
+<td><code>main.py</code></td>
+</tr>
+<tr>
+<td>Full pipeline script</td>
+<td><code>scripts/run_main_results.sh</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="conclusion">11. Conclusion</h2>
+<p>This project implemented and compared two approaches to training a
+latent-variable generative model on MNIST. The baseline VAE optimized
+the ELBO using an amortized diagonal-Gaussian approximate posterior. The
+approximate EM method initialized from the VAE, used Langevin dynamics
+to sample from the true posterior <span class="math inline">\(p_\theta(z
+\mid x)\)</span>, and updated the decoder using minibatch approximate
+M-steps.</p>
+<p>The approximate EM model modestly improved both reconstruction loss
+and approximate test log-likelihood. This suggests that posterior
+sampling with Langevin dynamics can refine a VAE-trained generator by
+moving beyond the amortized posterior used in the ELBO. The gains were
+not large, but they were consistent with the theory and were obtained
+with a moderate computational budget.</p>
+<p>References</p>
+<p>[1] Diederik and Max(2019) P. Kingma Diederik and Welling Max. An
+introduction to variational autoencoders. Foundations and Trends® in
+Machine Learning, 12(4): 307–392, November 2019. ISSN 1935-8245. doi:
+10.1561/2200000056. URL http://dx.doi.org/10.1561/2200000056.</p>
+<p>[2] Neal(2012) Radford M. Neal. MCMC using Hamiltonian dynamics,
+2012. https://arxiv.org/abs/1206.1901.</p>
+<p>[3] CS5430 Lecture Notes</p>
+</body>
+</html>
